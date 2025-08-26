@@ -17,12 +17,14 @@ public class SimpleTicTacToeStatusUpdater implements GameStatusUpdater {
         Symbol[][] symbols = game.getBoard().getSymbols();
         Symbol symbol = checkWinner(symbols);
 
-        if (symbol == Symbol.X) {
-            game.setStatus(GameStatus.X_WIN);
-        } else if (symbol == Symbol.O) {
-            game.setStatus(GameStatus.O_WIN);
-        }else if (isBoardFull(symbols)) {
-            game.setStatus(GameStatus.NO_ONE_WON);
+        switch (symbol) {
+            case X -> game.setStatus(GameStatus.X_WIN);
+            case O -> game.setStatus(GameStatus.O_WIN);
+            default -> {
+                if (isBoardFull(symbols)) {
+                    game.setStatus(GameStatus.NO_ONE_WON);
+                }
+            }
         }
     }
 
