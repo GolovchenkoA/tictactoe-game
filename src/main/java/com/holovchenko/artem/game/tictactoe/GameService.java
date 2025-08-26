@@ -15,11 +15,13 @@ import java.util.Optional;
 @Service
 public class GameService {
 
-    @Autowired
-    private GameRepository gameRepository;
+    private final GameRepository gameRepository;
+    private final SimpleTicTacToeStatusUpdater statusUpdater;
 
-    @Autowired
-    private SimpleTicTacToeStatusUpdater statusUpdater;
+    public GameService(GameRepository gameRepository, SimpleTicTacToeStatusUpdater statusUpdater) {
+        this.gameRepository = gameRepository;
+        this.statusUpdater = statusUpdater;
+    }
 
     public TicTacToeGame createGame(Player player1, Player player2) {
         TicTacToeGame game = TicTacToeGame.builder()
