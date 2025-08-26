@@ -4,7 +4,10 @@ import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Player;
 import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "games")
 @Builder
 @Getter
 @Setter
@@ -12,6 +15,7 @@ import lombok.*;
 @AllArgsConstructor
 public class TicTacToeGame {
 
+    @Id
     private String id;
     private Player player1;
     private Player player2;
