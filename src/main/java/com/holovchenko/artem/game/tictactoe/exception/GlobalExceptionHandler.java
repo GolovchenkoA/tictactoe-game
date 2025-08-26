@@ -27,6 +27,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIllegalTurns(Exception ex) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Try again!" + ex.getMessage());
+                .body(ex.getMessage());
     }
 }
