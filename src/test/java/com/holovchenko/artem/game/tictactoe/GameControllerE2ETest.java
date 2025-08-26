@@ -75,7 +75,7 @@ class GameControllerE2ETest {
 
 
     @Test
-    void shouldCreateGameAndPlay() {
+    void shouldCreateGameAndPlayAndWin() {
         String player1 = "player1";
         String player2 = "player2";
 
@@ -123,5 +123,37 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(GameStatus.X_WIN, response.getBody().getStatus());
+    }
+
+    @Test
+    void shouldReturn409ErrorCodeWhen2MovesInRow() {
+        String player1 = "player1";
+        String player2 = "player2";
+
+        // You can pass null or an empty HttpEntity if body is not needed
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
+
+        ResponseEntity<TicTacToeGame> response = restTemplate.postForEntity(
+                String.format("/games?player1=%s&player2=%s", player1, player2),
+                null,
+                TicTacToeGame.class
+        );
+
+        String gameId = response.getBody().getId();
+
+        // move X1
+        String url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 1);
+        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        // move X2
+        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 2);
+        ResponseEntity<String> conflictResponse = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, String.class);
+        assertEquals(HttpStatus.CONFLICT, conflictResponse.getStatusCode());
+
+        String errorMsg = "Should return HTTP 409 code when a player tries to make a move 2 times in a row";
+        assertEquals("Not your turn", conflictResponse.getBody(), errorMsg);
     }
 }

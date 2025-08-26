@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalTurnException.class)
     public ResponseEntity<String> handleIllegalTurns(Exception ex) {
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());
     }
 }
