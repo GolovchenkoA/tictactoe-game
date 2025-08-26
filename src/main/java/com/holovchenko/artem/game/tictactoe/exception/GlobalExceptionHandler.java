@@ -1,6 +1,5 @@
-package com.holovchenko.artem.game.tictactoe;
+package com.holovchenko.artem.game.tictactoe.exception;
 
-import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
