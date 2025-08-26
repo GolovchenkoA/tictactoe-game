@@ -16,8 +16,6 @@ import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -124,6 +122,6 @@ class GameControllerE2ETest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals(GameStatus.X_WON, response.getBody().getStatus());
+        assertEquals(GameStatus.X_WIN, response.getBody().getStatus());
     }
 }
