@@ -2,14 +2,12 @@ package com.holovchenko.artem.game.tictactoe;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
-import com.holovchenko.artem.game.tictactoe.model.GameStatus;
-import com.holovchenko.artem.game.tictactoe.model.HumanPlayer;
+import com.holovchenko.artem.game.tictactoe.model.Player;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +25,7 @@ public class GameController {
     @PostMapping
     public TicTacToeGame createGame(@RequestParam String player1, @RequestParam String player2) {
 
-        var game = gameService.createGame(new HumanPlayer(player1, Symbol.X), new HumanPlayer(player2, Symbol.O));
+        var game = gameService.createGame(new Player(player1, Symbol.X), new Player(player2, Symbol.O));
         LOG.info("Game created (ID {} ). Player 1: {}", game.getId(), player2);
 
         return game;
@@ -39,7 +37,7 @@ public class GameController {
     }
 
     @PatchMapping("/{gameId}")
-    public ResponseEntity<?> updateGame(@PathVariable String gameId,
+    public TicTacToeGame updateGame(@PathVariable String gameId,
                                         @RequestParam String player,
                                         @RequestParam int row,
                                         @RequestParam int column){
@@ -50,13 +48,7 @@ public class GameController {
         }
 
 //        TODO: create TicTacToeGameDTO
-        TicTacToeGame game = gameService.makeMove(gameId, player, row, column);
-
-        if (game.getStatus() != GameStatus.IN_PROGRESS) {
-            return ResponseEntity.ok("Game already finished " + game.getStatus());
-        }
-
-        return ResponseEntity.ok(game);
+        return gameService.makeMove(gameId, player, row, column);
     }
 
     public boolean isInBounds(int row, int column) {

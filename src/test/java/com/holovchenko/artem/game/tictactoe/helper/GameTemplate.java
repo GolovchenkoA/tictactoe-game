@@ -11,8 +11,8 @@ public class GameTemplate {
         TicTacToeGame game = new TicTacToeGame();
 
         String gameId = UUID.randomUUID().toString();
-        Player player1 = new HumanPlayer("player1", Symbol.X) ;
-        Player player2 = new HumanPlayer("player2", Symbol.O) ;
+        Player player1 = new Player("player1", Symbol.X) ;
+        Player player2 = new Player("player2", Symbol.O) ;
 
         game.setId(gameId);
         game.setCurrentPlayer(player1);

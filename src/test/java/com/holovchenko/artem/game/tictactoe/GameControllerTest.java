@@ -45,4 +45,5 @@ class GameControllerTest {
                 .andExpect(jsonPath("$.status").value("IN_PROGRESS"))
                 .andExpect(jsonPath("$.board").exists());
     }
+
 }

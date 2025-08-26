@@ -30,8 +30,8 @@ class GameServiceTest {
 
     @Test
     void shouldSaveGameWhenGameCreated() {
-        Player player1 = new HumanPlayer("player1", Symbol.X) ;
-        Player player2 = new HumanPlayer("player2", Symbol.O) ;
+        Player player1 = new Player("player1", Symbol.X) ;
+        Player player2 = new Player("player2", Symbol.O) ;
         gameService.createGame(player1, player2);
 
         verify(gameRepository, times(1)).save(any());
