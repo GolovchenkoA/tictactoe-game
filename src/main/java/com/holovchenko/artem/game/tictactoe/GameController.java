@@ -49,6 +49,7 @@ public class GameController {
             throw new IllegalTurnException(msg);
         }
 
+//        TODO: create TicTacToeGameDTO
         TicTacToeGame game = gameService.makeMove(gameId, player, row, column);
 
         if (game.getStatus() != GameStatus.IN_PROGRESS) {
