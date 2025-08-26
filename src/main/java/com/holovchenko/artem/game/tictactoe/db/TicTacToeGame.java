@@ -22,4 +22,12 @@ public class TicTacToeGame {
     private Player currentPlayer;
     private GameStatus status;
     private Board board;
+
+    public void setNextPlayer() {
+        if (currentPlayer.equals(player1)) {
+            currentPlayer = player2;
+        } else {
+            currentPlayer = player1;
+        }
+    }
 }
