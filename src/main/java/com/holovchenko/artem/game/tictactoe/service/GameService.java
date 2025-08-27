@@ -1,4 +1,4 @@
-package com.holovchenko.artem.game.tictactoe;
+package com.holovchenko.artem.game.tictactoe.service;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
@@ -6,7 +6,6 @@ import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Player;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

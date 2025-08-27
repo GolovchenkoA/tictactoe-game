@@ -1,16 +1,12 @@
-package com.holovchenko.artem.game.tictactoe;
+package com.holovchenko.artem.game.tictactoe.service;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.mockito.Mockito.*;
 

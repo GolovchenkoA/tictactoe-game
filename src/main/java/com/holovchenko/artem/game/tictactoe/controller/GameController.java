@@ -1,10 +1,9 @@
 package com.holovchenko.artem.game.tictactoe.controller;
 
-import com.holovchenko.artem.game.tictactoe.GameService;
+import com.holovchenko.artem.game.tictactoe.service.GameService;
 import com.holovchenko.artem.game.tictactoe.controller.validator.CreateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.controller.validator.UpdateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
-import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
 import com.holovchenko.artem.game.tictactoe.model.Player;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
 import lombok.extern.slf4j.Slf4j;

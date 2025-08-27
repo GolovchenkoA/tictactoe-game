@@ -1,4 +1,4 @@
-package com.holovchenko.artem.game.tictactoe;
+package com.holovchenko.artem.game.tictactoe.controller;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;

@@ -1,10 +1,10 @@
-package com.holovchenko.artem.game.tictactoe;
+package com.holovchenko.artem.game.tictactoe.controller;
 
-import com.holovchenko.artem.game.tictactoe.controller.GameController;
 import com.holovchenko.artem.game.tictactoe.controller.validator.CreateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.controller.validator.UpdateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.helper.GameTemplate;
+import com.holovchenko.artem.game.tictactoe.service.GameService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
