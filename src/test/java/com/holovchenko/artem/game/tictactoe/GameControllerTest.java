@@ -1,5 +1,8 @@
 package com.holovchenko.artem.game.tictactoe;
 
+import com.holovchenko.artem.game.tictactoe.controller.GameController;
+import com.holovchenko.artem.game.tictactoe.controller.validator.CreateGameRequestValidator;
+import com.holovchenko.artem.game.tictactoe.controller.validator.UpdateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.helper.GameTemplate;
 import org.junit.jupiter.api.Test;
@@ -22,6 +25,12 @@ class GameControllerTest {
 
     @MockitoBean
     private GameService gameService;
+
+    @MockitoBean
+    private CreateGameRequestValidator createGameRequestValidator;
+
+    @MockitoBean
+    private UpdateGameRequestValidator updateGameRequestValidator;
 
     @Test
     void createGame_shouldReturnCreatedGame() throws Exception {
