@@ -1,5 +1,6 @@
 package com.holovchenko.artem.game.tictactoe.controller.validator;
 
+import com.holovchenko.artem.game.tictactoe.dto.CreateGameRequest;
 import com.holovchenko.artem.game.tictactoe.exception.InvalidGameRequestException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,50 +17,56 @@ class CreateGameRequestValidatorTest {
 
     @Test
     void shouldPassValidation_WhenPlayersAreValid() {
-        assertDoesNotThrow(() -> validator.validate("Alice", "Bob"));
+        CreateGameRequest request = new CreateGameRequest("Alice", "Bob");
+        assertDoesNotThrow(() -> validator.validate(request));
     }
 
     @Test
     void shouldThrowException_WhenPlayer1IsNull() {
+        CreateGameRequest request = new CreateGameRequest(null, "Bob");
         InvalidGameRequestException exception = assertThrows(
                 InvalidGameRequestException.class,
-                () -> validator.validate(null, "Bob")
+                () -> validator.validate(request)
         );
         assertEquals("Player 1 must not be null or empty", exception.getMessage());
     }
 
     @Test
     void shouldThrowException_WhenPlayer2IsNull() {
+        CreateGameRequest request = new CreateGameRequest("Alice", null);
         InvalidGameRequestException exception = assertThrows(
                 InvalidGameRequestException.class,
-                () -> validator.validate("Alice", null)
+                () -> validator.validate(request)
         );
         assertEquals("Player 2 must not be null or empty", exception.getMessage());
     }
 
     @Test
     void shouldThrowException_WhenPlayer1IsEmpty() {
+        CreateGameRequest request = new CreateGameRequest("   ", "Bob");
         InvalidGameRequestException exception = assertThrows(
                 InvalidGameRequestException.class,
-                () -> validator.validate("   ", "Bob")
+                () -> validator.validate(request)
         );
         assertEquals("Player 1 must not be null or empty", exception.getMessage());
     }
 
     @Test
     void shouldThrowException_WhenPlayer2IsEmpty() {
+        CreateGameRequest request = new CreateGameRequest("Alice", "   ");
         InvalidGameRequestException exception = assertThrows(
                 InvalidGameRequestException.class,
-                () -> validator.validate("Alice", "   ")
+                () -> validator.validate(request)
         );
         assertEquals("Player 2 must not be null or empty", exception.getMessage());
     }
 
     @Test
     void shouldThrowException_WhenPlayerNamesAreSame_IgnoringCase() {
+        CreateGameRequest request = new CreateGameRequest("Alice", "aLIce");
         InvalidGameRequestException exception = assertThrows(
                 InvalidGameRequestException.class,
-                () -> validator.validate("Alice", "aLIce")
+                () -> validator.validate(request)
         );
         assertEquals("Player names must be different", exception.getMessage());
     }

@@ -1,6 +1,8 @@
 package com.holovchenko.artem.game.tictactoe.controller;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
+import com.holovchenko.artem.game.tictactoe.dto.UpdateGameRequest;
+import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
@@ -15,6 +17,9 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,9 +56,13 @@ class GameControllerE2ETest {
         String player1 = "player1";
         String player2 = "player2";
 
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("player1", player1);
+        requestBody.put("player2", player2);
+
         ResponseEntity<TicTacToeGame> response = restTemplate.postForEntity(
-                String.format("/games?player1=%s&player2=%s", player1, player2),
-                null,
+                "/games",
+                requestBody,
                 TicTacToeGame.class
         );
 
@@ -84,41 +93,71 @@ class GameControllerE2ETest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
 
-        ResponseEntity<TicTacToeGame> response = restTemplate.postForEntity(
-                String.format("/games?player1=%s&player2=%s", player1, player2),
-                null,
+        Map<String, String> requestBody = Map.of("player1", player1, "player2", player2);
+
+        // Use the requestBody in the postForEntity method
+        ResponseEntity<TicTacToeGame> createResponse = restTemplate.postForEntity(
+                "/games",
+                requestBody,
                 TicTacToeGame.class
         );
 
-        String gameId = response.getBody().getId();
+        String gameId = createResponse.getBody().getId();
 
-        // move X1
-        String url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 1);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+
+        // Move X1
+        UpdateGameRequest updateRequest = new UpdateGameRequest(player1, 1, 1);
+        ResponseEntity<UpdateGameResponse> response = restTemplate.exchange(
+                String.format("/games/%s", gameId), 
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        // move O1
-        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player2, 2, 1);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+// Move O1
+        updateRequest = new UpdateGameRequest(player2, 2, 1);
+        response = restTemplate.exchange(
+                String.format("/games/%s", gameId), 
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        // move X2
-        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 2);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+// Move X2
+        updateRequest = new UpdateGameRequest(player1, 1, 2);
+        response = restTemplate.exchange(
+                String.format("/games/%s", gameId), 
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        // move O2
-        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player2, 2, 2);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
-
+// Move O2
+        updateRequest = new UpdateGameRequest(player2, 2, 2);
+        response = restTemplate.exchange(
+                String.format("/games/%s", gameId), 
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(GameStatus.IN_PROGRESS, response.getBody().getStatus());
-        assertEquals(player1, response.getBody().getCurrentPlayer().name());
+        assertEquals(player1, response.getBody().getCurrentPlayer());
 
-        // move X3
-        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 3);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+// Move X3
+        updateRequest = new UpdateGameRequest(player1, 1, 3);
+        response = restTemplate.exchange(
+                String.format("/games/%s", gameId), 
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -130,27 +169,36 @@ class GameControllerE2ETest {
         String player1 = "player1";
         String player2 = "player2";
 
-        // You can pass null or an empty HttpEntity if body is not needed
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("player1", player1);
+        requestBody.put("player2", player2);
 
-        ResponseEntity<TicTacToeGame> response = restTemplate.postForEntity(
-                String.format("/games?player1=%s&player2=%s", player1, player2),
-                null,
+        ResponseEntity<TicTacToeGame> createResponse = restTemplate.postForEntity(
+                "/games",
+                requestBody,
                 TicTacToeGame.class
         );
 
-        String gameId = response.getBody().getId();
+        String gameId = createResponse.getBody().getId();
 
         // move X1
-        String url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 1);
-        response = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, TicTacToeGame.class);
+        UpdateGameRequest updateRequest = new UpdateGameRequest(player1, 1, 1);
+        ResponseEntity<UpdateGameResponse> response = restTemplate.exchange(
+                String.format("/games/%s", gameId),
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                UpdateGameResponse.class
+        );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
         // move X2
-        url = String.format("/games/%s?player=%s&row=%d&column=%d", gameId, player1, 1, 2);
-        ResponseEntity<String> conflictResponse = restTemplate.exchange(url, HttpMethod.PATCH, requestEntity, String.class);
+        updateRequest = new UpdateGameRequest(player1, 1, 2);
+        ResponseEntity<String> conflictResponse = restTemplate.exchange(
+                String.format("/games/%s", gameId),
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                String.class
+        );
         assertEquals(HttpStatus.CONFLICT, conflictResponse.getStatusCode());
 
         String errorMsg = "Should return HTTP 409 code when a player tries to make a move 2 times in a row";

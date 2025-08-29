@@ -1,6 +1,7 @@
 package com.holovchenko.artem.game.tictactoe.service;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
+import com.holovchenko.artem.game.tictactoe.exception.GameNotFoundException;
 import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
 import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;
@@ -44,7 +45,7 @@ public class GameService {
 
     public TicTacToeGame makeMove(String gameId, String player, int row, int column) {
         TicTacToeGame game = getGame(gameId)
-                .orElseThrow(() -> new RuntimeException("Game not found"));
+                .orElseThrow(() -> new GameNotFoundException("Game not found. ID" + gameId));
 
         if (game.getStatus() != GameStatus.IN_PROGRESS) {
             return game;

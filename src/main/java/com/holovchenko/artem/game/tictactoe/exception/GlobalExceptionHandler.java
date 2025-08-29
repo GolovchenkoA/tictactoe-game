@@ -10,21 +10,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception ex) {
-        String message = ex.getMessage() != null ? ex.getMessage() : "";
-
-        if (message.toLowerCase().contains("not found")) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body("Not Found: " + message);
-        } else {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Internal Server Error: " + message);
-        }
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Internal Server Error: " + ex.getMessage());
     }
 
+    @ExceptionHandler(GameNotFoundException.class)
+    public ResponseEntity<String> handleGameNotFound(GameNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(ex.getMessage());
+    }
     @ExceptionHandler(IllegalTurnException.class)
-    public ResponseEntity<String> handleIllegalTurns(Exception ex) {
+    public ResponseEntity<String> handleIllegalTurns(IllegalTurnException ex) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ex.getMessage());

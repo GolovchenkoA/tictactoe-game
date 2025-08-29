@@ -1,5 +1,6 @@
 package com.holovchenko.artem.game.tictactoe.controller.validator;
 
+import com.holovchenko.artem.game.tictactoe.dto.CreateGameRequest;
 import com.holovchenko.artem.game.tictactoe.exception.InvalidGameRequestException;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -7,7 +8,9 @@ import org.springframework.util.StringUtils;
 @Component
 public class CreateGameRequestValidator {
 
-    public void validate(String player1, String player2) {
+    public void validate(CreateGameRequest createGameRequest) {
+        String player1 = createGameRequest.getPlayer1();
+        String player2 = createGameRequest.getPlayer2();
         if (!StringUtils.hasText(player1)) {
             throw new InvalidGameRequestException("Player 1 must not be null or empty");
         }

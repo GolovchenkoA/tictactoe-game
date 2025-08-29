@@ -1,5 +1,9 @@
 package com.holovchenko.artem.game.tictactoe.controller;
 
+import com.holovchenko.artem.game.tictactoe.controller.mapper.TicTacToeGameMapper;
+import com.holovchenko.artem.game.tictactoe.dto.CreateGameRequest;
+import com.holovchenko.artem.game.tictactoe.dto.UpdateGameRequest;
+import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.service.GameService;
 import com.holovchenko.artem.game.tictactoe.controller.validator.CreateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.controller.validator.UpdateGameRequestValidator;
@@ -23,22 +27,27 @@ public class GameController {
     private final static Logger LOG = LoggerFactory.getLogger(GameController.class);
 
     private final GameService gameService;
+    private final TicTacToeGameMapper gameMapper;
     private final CreateGameRequestValidator createGameRequestValidator;
     private final UpdateGameRequestValidator updateGameValidator;
 
-    public GameController(GameService gameService, CreateGameRequestValidator createGameRequestValidator, UpdateGameRequestValidator updateGameValidator) {
+    public GameController(GameService gameService, TicTacToeGameMapper gameMapper, CreateGameRequestValidator createGameRequestValidator, UpdateGameRequestValidator updateGameValidator) {
         this.gameService = gameService;
+        this.gameMapper = gameMapper;
         this.createGameRequestValidator = createGameRequestValidator;
         this.updateGameValidator = updateGameValidator;
     }
 
     @PostMapping
-    public TicTacToeGame createGame(@RequestParam String player1, @RequestParam String player2) {
+    public TicTacToeGame createGame(@RequestBody CreateGameRequest requestBody) {
 
-        createGameRequestValidator.validate(player1, player2);
+        createGameRequestValidator.validate(requestBody);
+
+        String player1 = requestBody.getPlayer1();
+        String player2 = requestBody.getPlayer2();
 
         var game = gameService.createGame(new Player(player1, Symbol.X), new Player(player2, Symbol.O));
-        LOG.info("Game created (ID {} ). Player 1: {}", game.getId(), player2);
+        LOG.info("Game created (ID {} ). Player 1: {} Player 2: {}", game.getId(), player1, player2);
 
         return game;
     }
@@ -49,14 +58,18 @@ public class GameController {
     }
 
     @PatchMapping("/{gameId}")
-    public TicTacToeGame updateGame(@PathVariable String gameId,
-                                        @RequestParam String player,
-                                        @RequestParam int row,
-                                        @RequestParam int column){
+    public UpdateGameResponse updateGame(@PathVariable String gameId, @RequestBody UpdateGameRequest requestBody){
 
-        updateGameValidator.validate(gameId, player, row, column);
+        updateGameValidator.validate(gameId,
+                requestBody.getPlayer(),
+                requestBody.getRow(),
+                requestBody.getColumn());
 
-//        TODO: create TicTacToeGameDTO
-        return gameService.makeMove(gameId, player, row, column);
+        TicTacToeGame game = gameService.makeMove(gameId,
+                requestBody.getPlayer(),
+                requestBody.getRow(),
+                requestBody.getColumn());
+
+        return gameMapper.toUpdateGameResponse(game);
     }
 }
