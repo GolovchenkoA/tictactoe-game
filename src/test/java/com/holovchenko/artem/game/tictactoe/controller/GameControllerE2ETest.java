@@ -94,14 +94,8 @@ class GameControllerE2ETest {
         String player1Name = "player1";
         String player2Name = "player2";
 
-        // You can pass null or an empty HttpEntity if body is not needed
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
-
         Map<String, String> requestBody = Map.of("player1", player1Name, "player2", player2Name);
 
-        // Use the requestBody in the postForEntity method
         ResponseEntity<CreateUpdateGameResponse> createResponse = restTemplate.postForEntity(
                 "/games",
                 requestBody,
@@ -114,7 +108,7 @@ class GameControllerE2ETest {
         // Move X1
         UpdateGameRequest updateRequest = new UpdateGameRequest(player1Name, 1, 1);
         ResponseEntity<CreateUpdateGameResponse> response = restTemplate.exchange(
-                String.format("/games/%s", gameId), 
+                String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
                 CreateUpdateGameResponse.class
@@ -124,7 +118,7 @@ class GameControllerE2ETest {
 // Move O1
         updateRequest = new UpdateGameRequest(player2Name, 2, 1);
         response = restTemplate.exchange(
-                String.format("/games/%s", gameId), 
+                String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
                 CreateUpdateGameResponse.class
@@ -134,7 +128,7 @@ class GameControllerE2ETest {
 // Move X2
         updateRequest = new UpdateGameRequest(player1Name, 1, 2);
         response = restTemplate.exchange(
-                String.format("/games/%s", gameId), 
+                String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
                 CreateUpdateGameResponse.class
@@ -144,7 +138,7 @@ class GameControllerE2ETest {
 // Move O2
         updateRequest = new UpdateGameRequest(player2Name, 2, 2);
         response = restTemplate.exchange(
-                String.format("/games/%s", gameId), 
+                String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
                 CreateUpdateGameResponse.class
@@ -158,7 +152,7 @@ class GameControllerE2ETest {
 // Move X3
         updateRequest = new UpdateGameRequest(player1Name, 1, 3);
         response = restTemplate.exchange(
-                String.format("/games/%s", gameId), 
+                String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
                 CreateUpdateGameResponse.class
@@ -210,5 +204,38 @@ class GameControllerE2ETest {
 
         String errorMsg = "Should return HTTP 409 code when a player tries to make a move 2 times in a row";
         assertEquals("Not your turn", conflictResponse.getBody(), errorMsg);
+    }
+
+    @Test
+    void shouldReturnHttp409WhenOptimisticLockingFailureException() {
+        String player1Name = "player1";
+        String player2Name = "player2";
+
+        Map<String, String> requestBody = Map.of("player1", player1Name, "player2", player2Name);
+
+        ResponseEntity<CreateUpdateGameResponse> createResponse = restTemplate.postForEntity(
+                "/games",
+                requestBody,
+                CreateUpdateGameResponse.class
+        );
+
+        String gameId = createResponse.getBody().getGameId();
+
+        // Move X1
+        UpdateGameRequest updateRequest = new UpdateGameRequest(player1Name, 1, 1);
+        ResponseEntity<CreateUpdateGameResponse> response1 = restTemplate.exchange(
+                String.format("/games/%s", gameId),
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                CreateUpdateGameResponse.class
+        );
+        ResponseEntity<String> response2 = restTemplate.exchange(
+                String.format("/games/%s", gameId),
+                HttpMethod.PATCH,
+                new HttpEntity<>(updateRequest),
+                String.class
+        );
+        assertEquals(HttpStatus.OK, response1.getStatusCode());
+        assertEquals(HttpStatus.CONFLICT, response2.getStatusCode());
     }
 }

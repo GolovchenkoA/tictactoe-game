@@ -7,6 +7,7 @@ import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Player;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -56,7 +57,11 @@ public class GameService {
         game.getBoard().makeMove(--row, --column, game.getCurrentPlayer().symbol());
         statusUpdater.update(game);
 
-        return gameRepository.save(game);
+        try {
+            return gameRepository.save(game);
+        } catch (OptimisticLockingFailureException e) {
+            throw new OptimisticLockingFailureException("Ooops! Race condition exception", e);
+        }
     }
 
     private void validateUpdateRequest(TicTacToeGame game, String player) {
