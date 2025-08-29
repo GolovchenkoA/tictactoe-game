@@ -18,9 +18,6 @@ public interface TicTacToeGameMapper {
     }
 
     @Mapping(target = "gameId", source = "id")
-    @Mapping(target = "player1", expression = "java(game.getPlayer1().name())")
-    @Mapping(target = "player2", expression = "java(game.getPlayer2().name())")
-    @Mapping(target = "currentPlayer", expression = "java(game.getCurrentPlayer().name())")
     @Mapping(target = "board", source = "board")
     CreateUpdateGameResponse toGameResponse(TicTacToeGame game);
 }

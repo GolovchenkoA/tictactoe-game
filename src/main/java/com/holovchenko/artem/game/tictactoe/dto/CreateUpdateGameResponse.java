@@ -15,9 +15,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateUpdateGameResponse {
     private String gameId;
-    private String player1;
-    private String player2;
-    private String currentPlayer;
+    private Player player1;
+    private Player player2;
+    private Player currentPlayer;
     private GameStatus status;
     private Symbol[][] board;
 }

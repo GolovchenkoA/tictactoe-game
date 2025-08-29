@@ -19,10 +19,12 @@ class TicTacToeGameMapperTest {
     void testMaptoGameResponse() {
         //Given
         TicTacToeGame game = new TicTacToeGame();
+        Player player1 = new Player("Alice", Symbol.X);
+        Player player2 = new Player("Bob", Symbol.O);
         game.setId("123");
-        game.setPlayer1(new Player("Alice", Symbol.X));
-        game.setPlayer2(new Player("Bob", Symbol.O));
-        game.setCurrentPlayer(new Player("Alice", Symbol.X));
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
+        game.setCurrentPlayer(player1);
         game.setStatus(GameStatus.IN_PROGRESS);
 
         Board board = new Board();
@@ -34,9 +36,13 @@ class TicTacToeGameMapperTest {
 
         //Then
         assertEquals("123", response.getGameId());
-        assertEquals("Alice", response.getPlayer1());
-        assertEquals("Bob", response.getPlayer2());
-        assertEquals("Alice", response.getCurrentPlayer());
+        assertEquals("Alice", response.getPlayer1().name());
+        assertEquals(Symbol.X, response.getPlayer1().symbol());
+        assertEquals("Bob", response.getPlayer2().name());
+        assertEquals(Symbol.O, response.getPlayer2().symbol());
+
+        assertEquals(player1, response.getCurrentPlayer());
+
         assertEquals(GameStatus.IN_PROGRESS, response.getStatus());
         assertNotNull(response.getBoard());
         assertEquals(Symbol.X, response.getBoard()[0][0]);

@@ -37,9 +37,9 @@ public class GameRequestResponseTemplate {
         Player player2 = new Player("player2", Symbol.O) ;
 
         game.setGameId(gameId);
-        game.setCurrentPlayer("player1");
-        game.setPlayer1("player1");
-        game.setPlayer2("player2");
+        game.setCurrentPlayer(player1);
+        game.setPlayer1(player1);
+        game.setPlayer2(player2);
         game.setStatus(GameStatus.IN_PROGRESS);
         game.setBoard(new Board().getSymbols());
 

@@ -60,16 +60,12 @@ class GameControllerTest {
                 .content(objectMapper.writeValueAsString(createGameRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.gameId").value(dbGameEntity.getId()))
-                .andExpect(jsonPath("$.currentPlayer").value(player1))
-//                .andExpect(jsonPath("$.currentPlayer.name").value(expectedResponse.getPlayer1()))
-//                TODO
-//                .andExpect(jsonPath("$.currentPlayer.symbol").value("X"))
-                .andExpect(jsonPath("$.player1").value(player1))
-//                .andExpect(jsonPath("$.player1.name").value(expectedResponse.getPlayer1()))
-                .andExpect(jsonPath("$.player2").value(player2))
-//                .andExpect(jsonPath("$.player2.name").value(expectedResponse.getPlayer2()))
-//                .andExpect(jsonPath("$.player1.symbol").value("X"))
-//                .andExpect(jsonPath("$.player2.symbol").value("O"))
+                .andExpect(jsonPath("$.currentPlayer.name").value(player1))
+                .andExpect(jsonPath("$.player1.name").value(player1))
+                .andExpect(jsonPath("$.player2.name").value(player2))
+                .andExpect(jsonPath("$.currentPlayer.symbol").value("X"))
+                .andExpect(jsonPath("$.player1.symbol").value("X"))
+                .andExpect(jsonPath("$.player2.symbol").value("O"))
                 .andExpect(jsonPath("$.status").value("IN_PROGRESS"))
                 .andExpect(jsonPath("$.board").exists());
     }

@@ -69,15 +69,15 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getGameId());
-        assertEquals(player1, response.getBody().getPlayer1());
-        assertEquals(player2, response.getBody().getPlayer2());
-        assertEquals(player1, response.getBody().getCurrentPlayer());
-//        TODO: check
-//        assertEquals(player1, response.getBody().getPlayer1().name());
-//        assertEquals(player2, response.getBody().getPlayer2().name());
-//        assertEquals("X", response.getBody().getPlayer1().symbol());
-//        assertEquals("O", response.getBody().getPlayer1().symbol());
-//        assertEquals(player1, response.getBody().getCurrentPlayer().name());
+
+        assertEquals(player1, response.getBody().getCurrentPlayer().name());
+        assertEquals(player1, response.getBody().getPlayer1().name());
+        assertEquals(player2, response.getBody().getPlayer2().name());
+
+        assertEquals(Symbol.X, response.getBody().getCurrentPlayer().symbol());
+        assertEquals(Symbol.X, response.getBody().getPlayer1().symbol());
+        assertEquals(Symbol.O, response.getBody().getPlayer2().symbol());
+
         assertEquals(GameStatus.IN_PROGRESS, response.getBody().getStatus());
         assertNotNull(response.getBody().getBoard());
 
@@ -91,15 +91,15 @@ class GameControllerE2ETest {
 
     @Test
     void shouldCreateGameAndPlayAndWin() {
-        String player1 = "player1";
-        String player2 = "player2";
+        String player1Name = "player1";
+        String player2Name = "player2";
 
         // You can pass null or an empty HttpEntity if body is not needed
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Void> requestEntity = new HttpEntity<>(null, headers);
 
-        Map<String, String> requestBody = Map.of("player1", player1, "player2", player2);
+        Map<String, String> requestBody = Map.of("player1", player1Name, "player2", player2Name);
 
         // Use the requestBody in the postForEntity method
         ResponseEntity<CreateUpdateGameResponse> createResponse = restTemplate.postForEntity(
@@ -112,7 +112,7 @@ class GameControllerE2ETest {
 
 
         // Move X1
-        UpdateGameRequest updateRequest = new UpdateGameRequest(player1, 1, 1);
+        UpdateGameRequest updateRequest = new UpdateGameRequest(player1Name, 1, 1);
         ResponseEntity<CreateUpdateGameResponse> response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
@@ -122,7 +122,7 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
 // Move O1
-        updateRequest = new UpdateGameRequest(player2, 2, 1);
+        updateRequest = new UpdateGameRequest(player2Name, 2, 1);
         response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
@@ -132,7 +132,7 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
 // Move X2
-        updateRequest = new UpdateGameRequest(player1, 1, 2);
+        updateRequest = new UpdateGameRequest(player1Name, 1, 2);
         response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
@@ -142,7 +142,7 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
 // Move O2
-        updateRequest = new UpdateGameRequest(player2, 2, 2);
+        updateRequest = new UpdateGameRequest(player2Name, 2, 2);
         response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
@@ -152,10 +152,11 @@ class GameControllerE2ETest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(GameStatus.IN_PROGRESS, response.getBody().getStatus());
-        assertEquals(player1, response.getBody().getCurrentPlayer());
+        assertEquals(player1Name, response.getBody().getCurrentPlayer().name());
+        assertEquals(Symbol.X, response.getBody().getCurrentPlayer().symbol());
 
 // Move X3
-        updateRequest = new UpdateGameRequest(player1, 1, 3);
+        updateRequest = new UpdateGameRequest(player1Name, 1, 3);
         response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
