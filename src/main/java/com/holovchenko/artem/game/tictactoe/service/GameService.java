@@ -16,9 +16,9 @@ import java.util.Optional;
 public class GameService {
 
     private final GameRepository gameRepository;
-    private final SimpleTicTacToeStatusUpdater statusUpdater;
+    private final SimpleStatusUpdater statusUpdater;
 
-    public GameService(GameRepository gameRepository, SimpleTicTacToeStatusUpdater statusUpdater) {
+    public GameService(GameRepository gameRepository, SimpleStatusUpdater statusUpdater) {
         this.gameRepository = gameRepository;
         this.statusUpdater = statusUpdater;
     }

@@ -23,7 +23,7 @@ class GameServiceTest {
     private GameRepository gameRepository;
 
     @Mock
-    private SimpleTicTacToeStatusUpdater statusUpdater;
+    private SimpleStatusUpdater statusUpdater;
 
     @InjectMocks
     private GameService gameService;

@@ -10,15 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 
 import static org.mockito.Mockito.*;
 
-class SimpleTicTacToeStatusUpdaterTest {
+class SimpleStatusUpdaterTest {
 
-    private SimpleTicTacToeStatusUpdater updater;
+    private SimpleStatusUpdater updater;
     private TicTacToeGame game;
     private Board board;
 
     @BeforeEach
     public void setUp() {
-        updater = new SimpleTicTacToeStatusUpdater();
+        updater = new SimpleStatusUpdater();
         game = mock(TicTacToeGame.class);
         board = mock(Board.class);
         when(game.getBoard()).thenReturn(board);

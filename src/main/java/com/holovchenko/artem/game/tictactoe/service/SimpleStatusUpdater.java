@@ -6,7 +6,7 @@ import com.holovchenko.artem.game.tictactoe.model.Symbol;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SimpleTicTacToeStatusUpdater implements GameStatusUpdater {
+public class SimpleStatusUpdater implements GameStatusUpdater {
     @Override
     public void update(TicTacToeGame game) {
         game.setNextPlayer();
