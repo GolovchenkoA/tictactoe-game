@@ -1,8 +1,8 @@
 package com.holovchenko.artem.game.tictactoe.controller;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
+import com.holovchenko.artem.game.tictactoe.dto.CreateUpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.dto.UpdateGameRequest;
-import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.model.GameRepository;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
@@ -60,22 +60,28 @@ class GameControllerE2ETest {
         requestBody.put("player1", player1);
         requestBody.put("player2", player2);
 
-        ResponseEntity<TicTacToeGame> response = restTemplate.postForEntity(
+        ResponseEntity<CreateUpdateGameResponse> response = restTemplate.postForEntity(
                 "/games",
                 requestBody,
-                TicTacToeGame.class
+                CreateUpdateGameResponse.class
         );
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertNotNull(response.getBody().getId());
-        assertEquals(player1, response.getBody().getPlayer1().name());
-        assertEquals(player2, response.getBody().getPlayer2().name());
-        assertEquals(player1, response.getBody().getCurrentPlayer().name());
+        assertNotNull(response.getBody().getGameId());
+        assertEquals(player1, response.getBody().getPlayer1());
+        assertEquals(player2, response.getBody().getPlayer2());
+        assertEquals(player1, response.getBody().getCurrentPlayer());
+//        TODO: check
+//        assertEquals(player1, response.getBody().getPlayer1().name());
+//        assertEquals(player2, response.getBody().getPlayer2().name());
+//        assertEquals("X", response.getBody().getPlayer1().symbol());
+//        assertEquals("O", response.getBody().getPlayer1().symbol());
+//        assertEquals(player1, response.getBody().getCurrentPlayer().name());
         assertEquals(GameStatus.IN_PROGRESS, response.getBody().getStatus());
         assertNotNull(response.getBody().getBoard());
 
-        for (Symbol[] symbol : response.getBody().getBoard().getSymbols()) {
+        for (Symbol[] symbol : response.getBody().getBoard()) {
             for (Symbol value : symbol) {
                 assertEquals(Symbol.EMPTY, value);
             }
@@ -96,22 +102,22 @@ class GameControllerE2ETest {
         Map<String, String> requestBody = Map.of("player1", player1, "player2", player2);
 
         // Use the requestBody in the postForEntity method
-        ResponseEntity<TicTacToeGame> createResponse = restTemplate.postForEntity(
+        ResponseEntity<CreateUpdateGameResponse> createResponse = restTemplate.postForEntity(
                 "/games",
                 requestBody,
-                TicTacToeGame.class
+                CreateUpdateGameResponse.class
         );
 
-        String gameId = createResponse.getBody().getId();
+        String gameId = createResponse.getBody().getGameId();
 
 
         // Move X1
         UpdateGameRequest updateRequest = new UpdateGameRequest(player1, 1, 1);
-        ResponseEntity<UpdateGameResponse> response = restTemplate.exchange(
+        ResponseEntity<CreateUpdateGameResponse> response = restTemplate.exchange(
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -121,7 +127,7 @@ class GameControllerE2ETest {
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -131,7 +137,7 @@ class GameControllerE2ETest {
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -141,7 +147,7 @@ class GameControllerE2ETest {
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -154,7 +160,7 @@ class GameControllerE2ETest {
                 String.format("/games/%s", gameId), 
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
@@ -173,21 +179,21 @@ class GameControllerE2ETest {
         requestBody.put("player1", player1);
         requestBody.put("player2", player2);
 
-        ResponseEntity<TicTacToeGame> createResponse = restTemplate.postForEntity(
+        ResponseEntity<CreateUpdateGameResponse> createResponse = restTemplate.postForEntity(
                 "/games",
                 requestBody,
-                TicTacToeGame.class
+                CreateUpdateGameResponse.class
         );
 
-        String gameId = createResponse.getBody().getId();
+        String gameId = createResponse.getBody().getGameId();
 
         // move X1
         UpdateGameRequest updateRequest = new UpdateGameRequest(player1, 1, 1);
-        ResponseEntity<UpdateGameResponse> response = restTemplate.exchange(
+        ResponseEntity<CreateUpdateGameResponse> response = restTemplate.exchange(
                 String.format("/games/%s", gameId),
                 HttpMethod.PATCH,
                 new HttpEntity<>(updateRequest),
-                UpdateGameResponse.class
+                CreateUpdateGameResponse.class
         );
         assertEquals(HttpStatus.OK, response.getStatusCode());
 

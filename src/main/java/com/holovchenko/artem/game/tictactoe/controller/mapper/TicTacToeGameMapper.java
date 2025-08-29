@@ -1,7 +1,7 @@
 package com.holovchenko.artem.game.tictactoe.controller.mapper;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
-import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
+import com.holovchenko.artem.game.tictactoe.dto.CreateUpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.Symbol;
 import org.mapstruct.Mapper;
@@ -22,5 +22,5 @@ public interface TicTacToeGameMapper {
     @Mapping(target = "player2", expression = "java(game.getPlayer2().name())")
     @Mapping(target = "currentPlayer", expression = "java(game.getCurrentPlayer().name())")
     @Mapping(target = "board", source = "board")
-    UpdateGameResponse toUpdateGameResponse(TicTacToeGame game);
+    CreateUpdateGameResponse toGameResponse(TicTacToeGame game);
 }

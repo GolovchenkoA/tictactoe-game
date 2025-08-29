@@ -3,7 +3,7 @@ package com.holovchenko.artem.game.tictactoe.controller;
 import com.holovchenko.artem.game.tictactoe.controller.mapper.TicTacToeGameMapper;
 import com.holovchenko.artem.game.tictactoe.dto.CreateGameRequest;
 import com.holovchenko.artem.game.tictactoe.dto.UpdateGameRequest;
-import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
+import com.holovchenko.artem.game.tictactoe.dto.CreateUpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.service.GameService;
 import com.holovchenko.artem.game.tictactoe.controller.validator.CreateGameRequestValidator;
 import com.holovchenko.artem.game.tictactoe.controller.validator.UpdateGameRequestValidator;
@@ -39,7 +39,7 @@ public class GameController {
     }
 
     @PostMapping
-    public TicTacToeGame createGame(@RequestBody CreateGameRequest requestBody) {
+    public CreateUpdateGameResponse createGame(@RequestBody CreateGameRequest requestBody) {
 
         createGameRequestValidator.validate(requestBody);
 
@@ -49,7 +49,7 @@ public class GameController {
         var game = gameService.createGame(new Player(player1, Symbol.X), new Player(player2, Symbol.O));
         LOG.info("Game created (ID {} ). Player 1: {} Player 2: {}", game.getId(), player1, player2);
 
-        return game;
+        return gameMapper.toGameResponse(game);
     }
 
     @GetMapping
@@ -58,7 +58,7 @@ public class GameController {
     }
 
     @PatchMapping("/{gameId}")
-    public UpdateGameResponse updateGame(@PathVariable String gameId, @RequestBody UpdateGameRequest requestBody){
+    public CreateUpdateGameResponse updateGame(@PathVariable String gameId, @RequestBody UpdateGameRequest requestBody) {
 
         updateGameValidator.validate(gameId,
                 requestBody.getPlayer(),
@@ -70,6 +70,6 @@ public class GameController {
                 requestBody.getRow(),
                 requestBody.getColumn());
 
-        return gameMapper.toUpdateGameResponse(game);
+        return gameMapper.toGameResponse(game);
     }
 }

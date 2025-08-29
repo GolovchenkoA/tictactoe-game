@@ -2,7 +2,7 @@ package com.holovchenko.artem.game.tictactoe.service;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
 import com.holovchenko.artem.game.tictactoe.exception.IllegalTurnException;
-import com.holovchenko.artem.game.tictactoe.helper.GameTemplate;
+import com.holovchenko.artem.game.tictactoe.helper.GameRequestResponseTemplate;
 import com.holovchenko.artem.game.tictactoe.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +43,7 @@ class GameServiceTest {
 
         String gameID = "UUID-ID-1";
 
-        TicTacToeGame game = GameTemplate.createGame();
+        TicTacToeGame game = GameRequestResponseTemplate.createDbGameModel();
         game.setId(gameID);
         game.setStatus(GameStatus.NO_ONE_WON);
         when(gameRepository.findById(gameID)).thenReturn(Optional.of(game));
@@ -65,7 +65,7 @@ class GameServiceTest {
 
         String gameID = "UUID-ID-1";
 
-        TicTacToeGame game = GameTemplate.createGame();
+        TicTacToeGame game = GameRequestResponseTemplate.createDbGameModel();
         game.setId(gameID);
         when(gameRepository.findById(gameID)).thenReturn(Optional.of(game));
 
@@ -85,7 +85,7 @@ class GameServiceTest {
     void shouldThrowExceptionWhenNotUserMove() {
         //Given
         String gameID = "UUID-ID-1";
-        TicTacToeGame game = GameTemplate.createGame();
+        TicTacToeGame game = GameRequestResponseTemplate.createDbGameModel();
         game.setId(gameID);
         game.setCurrentPlayer(game.getPlayer2());
 

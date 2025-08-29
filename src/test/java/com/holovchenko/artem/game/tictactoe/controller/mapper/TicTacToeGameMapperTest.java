@@ -3,7 +3,7 @@ package com.holovchenko.artem.game.tictactoe.controller.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.holovchenko.artem.game.tictactoe.db.TicTacToeGame;
-import com.holovchenko.artem.game.tictactoe.dto.UpdateGameResponse;
+import com.holovchenko.artem.game.tictactoe.dto.CreateUpdateGameResponse;
 import com.holovchenko.artem.game.tictactoe.model.Board;
 import com.holovchenko.artem.game.tictactoe.model.GameStatus;
 import com.holovchenko.artem.game.tictactoe.model.Player;
@@ -16,7 +16,7 @@ class TicTacToeGameMapperTest {
     private final TicTacToeGameMapper gameMapper = Mappers.getMapper(TicTacToeGameMapper.class);
 
     @Test
-    void testMapToUpdateGameResponse() {
+    void testMaptoGameResponse() {
         //Given
         TicTacToeGame game = new TicTacToeGame();
         game.setId("123");
@@ -30,7 +30,7 @@ class TicTacToeGameMapperTest {
         game.setBoard(board);
 
         //When
-        UpdateGameResponse response = gameMapper.toUpdateGameResponse(game);
+        CreateUpdateGameResponse response = gameMapper.toGameResponse(game);
 
         //Then
         assertEquals("123", response.getGameId());
